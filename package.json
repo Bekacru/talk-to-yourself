@@ -1,16 +1,18 @@
 {
-  "name": "Chat-YourSelf",
+  "name": "talk-to-yourself",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+      "tailwind": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@vercel/edge": "^1.1.1",
+    "@vercel/edge": "^1.1.1"
+  },
+  "devDependencies": {
     "tailwindcss": "^3.4.1"
   }
 }
