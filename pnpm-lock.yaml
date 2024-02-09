@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@vercel/edge':
+    specifier: ^1.1.1
+    version: 1.1.1
   tailwindcss:
     specifier: ^3.4.1
     version: 3.4.1
@@ -85,6 +88,10 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  /@vercel/edge@1.1.1:
+    resolution: {integrity: sha512-NtKiIbn9Cq6HWGy+qRudz28mz5nxfOJWls5Pnckjw1yCfSX8rhXdvY/il3Sy3Zd5n/sKCM2h7VSCCpJF/oaDrQ==}
+    dev: false
 
   /ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}

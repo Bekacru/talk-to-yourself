@@ -1,4 +1,4 @@
-# Talk to Yourself
+# Talk With Yourself
 
 Welcome to this simple site where you can have a conversation with yourself. 
 
