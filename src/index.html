@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+
+    <link href="./output.css" rel="stylesheet">
+    <title>
+        Talk to yourself
+    </title>
+    <style>
+        *::-webkit-scrollbar {
+        display: none;  /* for Chrome, Safari and Opera */
+        }
+
+       * {
+            -ms-overflow-style: none;  /* for Internet Explorer and Edge */
+            scrollbar-width: none;  /* for Firefox */
+        }
+    </style>
+</head>
+<body class="bg-[#1f1f1f]">
+    <div class="mx-auto relative max-w-[43rem] px-4 text-neutral-200 min-h-screen flex flex-col justify-between py-4">
+        <div class="sticky top-4">
+            <div class="flex justify-between text-neutral-500 border-b border-neutral-700 pb-2">
+                  <a href="https://github.com/bekacru" target="_blank" class="flex items-center gap-1 hover:text-purple-200 transition-all duration-200 ease-in-out" role="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33c.85 0 1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg>
+                    <p class="text-sm italic">
+                        Talk to yourself
+                    </p>
+                  </a>
+                <button class="text-sm italic underline" role="button" onclick="clearChat()">
+                    Clear Chat
+                </button>
+            </div>
+        </div>
+   
+        <div class="flex flex-col items-center text-neutral-500" id="placeholder"> 
+            <h2 class="font-bold text-3xl">
+                Talk to yourself
+            </h2>
+            <p class="text-neutral-400 text-center text-sm italic">
+                Hey there! How's life treating you? You can talk with your self here for a moment! And yeah, your chat only stays on your browser.
+            </p>
+            <button onclick="restore()" class="mt-3 flex items-center gap-2" id="restore-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256"><path fill="currentColor" fill-rule="evenodd" d="M55.265 167.072c-.975-1.973-3.388-2.796-5.372-1.847L42 169s22.5 53.5 85.5 56c60-1.5 96.627-48.626 97-96.5c.373-47.874-37-95.5-95.5-96c-57.5-1-79.556 45.004-79.556 45.004c-1.073 1.93-1.944 1.698-1.944-.501V51.997a4 4 0 0 0-4-3.997H37c-2.209 0-4 1.8-4 4.008v48.984A3.998 3.998 0 0 0 36.998 105h50.504a3.995 3.995 0 0 0 3.998-3.993v-6.014c0-2.205-1.79-4.02-4.008-4.053l-25.484-.38c-2.214-.033-3.223-1.679-2.182-3.628C59.826 86.932 78 45 128.5 45.5c49 .5 82.751 41.929 82.5 83.242C208 184 166 211 127.5 210c-54.5 0-72.235-42.928-72.235-42.928"/></svg>
+                Restore Last Chat
+            </button>
+        </div>
+        <div class="flex flex-col gap-2">
+            <div id="chat-container" class="flex flex-col gap-2 overflow-y-scroll max-h-[88vh] relative pt-1">
+            </div>
+            <form 
+            class="sticky bottom-4"
+            onsubmit="onSubmit(event)"
+            >
+                <div class="border border-neutral-600 flex-grow rounded-md focus-within:ring-neutral-500 flex items-center gap-2 w-full px-2 py-2">
+                    <input class=" bg-transparent  rounded-md outline-none  text-neutral-400 transition-all duration-300 ease-in-out placeholder:text-neutral-600 w-full" name="chat" autocomplete="off" placeholder="Write a message..." />
+                </div>
+                </from>
+        </div>
+    </div>
+    <script>
+     
+        const storedMessages = localStorage.getItem("messages")
+        let messages =  []
+        let restored = false;
+        let cleared = false;
+        const chatContainer = document.getElementById('chat-container');
+        const restoreBtn = document.getElementById('restore-btn')
+        if(storedMessages === "null"){
+            restoreBtn.style.display = "none";
+        }
+        function setMessage(){
+            chatContainer.innerHTML = "";
+            messages.map((text, index)=>{
+                    const div = document.createElement('div');
+                    div.classList.add('flex', 'items-center', 'gap-2');
+                    const div2 = document.createElement('div');
+                    const bgColor = index % 2 === 0 ? 'bg-purple-100/80' : 'bg-orange-600/80';
+                    const textColor = index % 2 === 0 ? 'text-neutral-800' : 'text-neutral-200';
+                    div2.classList.add(bgColor, textColor, 'rounded-md', 'p-1', 'px-2', 'flex', 'items-center', 'justify-center', 'font-bold', 'focus-within:ring-1', 'text-xs', 'w-max');
+                    div2.textContent = 'ME';
+                    div.appendChild(div2);
+                    const p = document.createElement('p');
+                    p.style.wordWrap = 'break-word';
+                    p.style.width = "88%"
+                    p.textContent = text;
+                    
+                    div.appendChild(p);
+                    chatContainer.appendChild(div);
+                })
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        function restore(){
+            placeholder.style.display = "none";
+            messages = JSON.parse(localStorage.getItem("messages")) || [];
+            if(messages && messages.length){
+                setMessage() 
+            }
+            restored = true;
+        }
+        const onSubmit = (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const input = form.querySelector('input[name="chat"]');
+            const message = input.value;
+            messages.push(message);
+            if(!restored && !cleared){
+                localStorage.setItem(
+                    "messages",
+                    null
+                )
+                cleared = true;
+            }
+            localStorage.setItem(
+                "messages",
+                JSON.stringify(messages)
+            )
+            input.value = ""
+            if(placeholder && placeholder.style.display !== "none" && messages.length){
+                 placeholder.style.display = "none";
+            }
+            setMessage()
+        }
+        function clearChat(){
+            localStorage.setItem(
+                "messages",
+                null
+            )
+            chatContainer.innerHTML = "";
+            placeholder.style.display = "flex";
+            restoreBtn.style.display = "none";
+            messages = [];
+            cleared = true;
+        }
+
+
+        const favicon = document.querySelector('link[rel="icon"]');
+        function setFavicon() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                favicon.href = '../assets/favicon-dark.svg';  // Path to dark mode favicon
+            } else {
+                favicon.href = '../assets/favicon.svg';  // Path to light mode favicon
+            }
+        }
+        setFavicon();
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setFavicon);
+    </script>
+</body>
+</html>
