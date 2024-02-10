@@ -160,7 +160,7 @@
         }
 
         function onKeyDown(event, textarea) {
-            if (event.key === 'Enter' && (event.shiftKey || event.metaKey)) {
+            if (event.key === 'Enter' && (event.shiftKey || event.metaKey || event.ctrlKey)) {
                 event.preventDefault();
                 textarea.form.dispatchEvent(new Event('submit', { cancelable: true }));
             }
