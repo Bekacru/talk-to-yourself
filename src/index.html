@@ -71,7 +71,7 @@
             onsubmit="onSubmit(event)"
             >
                 <div class="border border-neutral-600 focus-within:ring-1 flex-grow rounded-md ring-neutral-500/80 flex items-center gap-2 w-full transition-all duration-300 ease-in-out px-2 py-2">
-                    <input class=" bg-transparent  rounded-md outline-none  text-neutral-400  placeholder:text-neutral-600 w-full" name="chat" autocomplete="off" placeholder="Write a message..." />
+                    <textarea rows="1" oninput="adjustRows(this)" class=" bg-transparent  rounded-md outline-none  text-neutral-400  placeholder:text-neutral-600 w-full" style="resize: none;" name="chat" autocomplete="off" placeholder="Write a message..." onkeydown="onKeyDown(event, this)"></textarea>
                     <button type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32" class="text-neutral-500 transition-all duration-300 ease-in-out group-focus-within:text-neutral-400"><path fill="currentColor" d="M27.71 4.29a1 1 0 0 0-1.05-.23l-22 8a1 1 0 0 0 0 1.87l9.6 3.84l3.84 9.6a1 1 0 0 0 .9.63a1 1 0 0 0 .92-.66l8-22a1 1 0 0 0-.21-1.05M19 24.2l-2.79-7L21 12.41L19.59 11l-4.83 4.83L7.8 13l17.53-6.33Z"/></svg>
                     </button>
@@ -104,12 +104,13 @@
                     const p = document.createElement('p');
                     p.style.wordWrap = 'break-word';
                     p.style.width = "88%"
-                    p.textContent = text;
+                    p.innerHTML = text;
                     
                     div.appendChild(p);
                     chatContainer.appendChild(div);
                 })
                 chatContainer.scrollTop = chatContainer.scrollHeight;
+                adjustRows(document.querySelector('textarea'))
         }
         function restore(){
             placeholder.style.display = "none";
@@ -122,10 +123,11 @@
         const onSubmit = (e) => {
             e.preventDefault();
             const form = e.target;
-            const input = form.querySelector('input[name="chat"]');
+            const input = form.querySelector('textarea')
             const message = input.value;
-            messages.push(message);
-            if(!restored && !cleared){
+            const formattedMessage = message.replace(/\n/g, '<br/>');
+            messages.push(formattedMessage);
+            if(!restored && !cleared){x
                 localStorage.setItem(
                     "messages",
                     null
@@ -154,6 +156,16 @@
             cleared = true;
         }
 
+        function onKeyDown(event, textarea) {
+            if (event.key === 'Enter' && (event.shiftKey || event.metaKey)) {
+                event.preventDefault();
+                textarea.form.dispatchEvent(new Event('submit', { cancelable: true }));
+            }
+        }
+
+        function adjustRows(textarea) {
+            textarea.rows = textarea.value.split('\n').length;
+        }
 
         const favicon = document.querySelector('link[rel="icon"]');
         function setFavicon() {
